@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import styles from "./Card.module.scss";
 
-function Card(props) {
-  const { product } = props;
+function Card({ product, addToCart }) {
   const [isAdded, setIsAdded] = useState(false);
 
   const onAddCart = () => {
+    addToCart(product);
     setIsAdded(!isAdded);
   };
 
