@@ -1,12 +1,15 @@
-function Drawer() {
+import styles from "./Drawer.module.scss";
+
+function Drawer(props) {
+  const { setIsOpened } = props;
   return (
-    <div style={{ display: "none" }} className="overlay">
-      <div className="drawer">
+    <div className="overlay">
+      <div className={styles.drawer}>
         <h2 className="d-flex justify-between mb-30">
-          Cart <img className="cu-p" src="/img/btn-remove.svg" alt="Remove" />
+          Cart <img className="cu-p" src="/img/btn-remove.svg" alt="Remove" onClick={() => setIsOpened(false)} />
         </h2>
 
-        <div className="items">
+        <div className={styles.items}>
           <div className="cartItem d-flex align-center mb-20">
             <div style={{ backgroundImage: "url(/img/sneakers/1.jpg)" }} className="cartItemImg"></div>
 
