@@ -32,16 +32,23 @@ function App() {
   // }, []);
 
   useEffect(() => {
-    axios("https://625d9d6f95cd5855d6237188.mockapi.io/items").then((response) => setItems(response.data));
+    axios.get("https://625d9d6f95cd5855d6237188.mockapi.io/items").then((res) => setItems(res.data));
+    axios.get("https://625d9d6f95cd5855d6237188.mockapi.io/cart").then((res) => setCartItems(res.data));
   }, []);
 
   const addToCart = (item) => {
+    axios.post("https://625d9d6f95cd5855d6237188.mockapi.io/cart", item);
     setCartItems([...cartItems, item]);
+  };
+
+  const onRemove = (id) => {
+    setCartItems(cartItems.filter((item) => item.id !== id));
+    axios.delete(`https://625d9d6f95cd5855d6237188.mockapi.io/cart/${id}`);
   };
 
   return (
     <div className="wrapper clear">
-      {isOpened && <Drawer setIsOpened={setIsOpened} cartItems={cartItems} />}
+      {isOpened && <Drawer setIsOpened={setIsOpened} cartItems={cartItems} onRemove={onRemove} />}
 
       <Header setIsOpened={setIsOpened} cartItems={cartItems} />
       <div className="content p-40">
