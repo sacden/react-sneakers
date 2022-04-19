@@ -2,11 +2,17 @@ import React, { useState, useEffect } from "react";
 import Card from "./components/Card";
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
+import axios from "axios";
 
 function App() {
   const [isOpened, setIsOpened] = useState(false);
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [search, setSearch] = useState("");
+
+  const onChangeSearchInput = (e) => {
+    setSearch(e.target.value);
+  };
 
   // const [items, setItems] = useState([
   //   { title: "Sneakers for men Nike Blazer Mid Suede", price: 1399, imageUrl: "/img/products/1.jpg" },
@@ -19,10 +25,14 @@ function App() {
   //   { title: "Sneakers for men Nike Lebron XVIII", price: 899, imageUrl: "/img/products/8.jpg" },
   // ]);
 
+  // useEffect(() => {
+  //   fetch("https://625d9d6f95cd5855d6237188.mockapi.io/items")
+  //     .then((response) => response.json())
+  //     .then((items) => setItems(items));
+  // }, []);
+
   useEffect(() => {
-    fetch("https://625d9d6f95cd5855d6237188.mockapi.io/items")
-      .then((response) => response.json())
-      .then((items) => setItems(items));
+    axios("https://625d9d6f95cd5855d6237188.mockapi.io/items").then((response) => setItems(response.data));
   }, []);
 
   const addToCart = (item) => {
@@ -39,10 +49,12 @@ function App() {
           <h1>All products</h1>
           <div className="search-block d-flex">
             <img src="/img/search.svg" alt="Search" />
-            <input placeholder="Search..." />
+            <input placeholder="Search..." onChange={onChangeSearchInput} />
           </div>
         </div>
-        <div className="d-flex flex-wrap">{items && items.map((product) => <Card product={product} addToCart={addToCart} key={product.id} />)}</div>
+        <div className="d-flex flex-wrap">
+          {items && items.filter((el) => el.title.toLowerCase().includes(search.toLowerCase())).map((product) => <Card product={product} addToCart={addToCart} key={product.id} />)}
+        </div>
       </div>
     </div>
   );
