@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Card from "./components/Card";
+import { Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
 import axios from "axios";
+import Products from "./pages/Products";
+import Favorites from "./pages/Favorites";
 
 function App() {
   const [isOpened, setIsOpened] = useState(false);
@@ -49,19 +51,12 @@ function App() {
   return (
     <div className="wrapper clear">
       {isOpened && <Drawer setIsOpened={setIsOpened} cartItems={cartItems} onRemove={onRemove} />}
-
       <Header setIsOpened={setIsOpened} cartItems={cartItems} />
       <div className="content p-40">
-        <div className="d-flex align-center justify-between mb-40">
-          <h1>All products</h1>
-          <div className="search-block d-flex">
-            <img src="/img/search.svg" alt="Search" />
-            <input placeholder="Search..." onChange={onChangeSearchInput} />
-          </div>
-        </div>
-        <div className="d-flex flex-wrap">
-          {items && items.filter((el) => el.title.toLowerCase().includes(search.toLowerCase())).map((product) => <Card product={product} addToCart={addToCart} key={product.id} />)}
-        </div>
+        <Routes>
+          <Route path="/" index element={<Products onChangeSearchInput={onChangeSearchInput} items={items} search={search} addToCart={addToCart} />}></Route>
+          <Route path="favorites" index element={<Favorites />}></Route>
+        </Routes>
       </div>
     </div>
   );

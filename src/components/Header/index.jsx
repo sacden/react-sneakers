@@ -1,17 +1,25 @@
+import { Link } from "react-router-dom";
 function Header({ setIsOpened, cartItems }) {
   return (
     <header className="d-flex justify-between align-center p-40">
-      <div className="d-flex align-center">
-        <img width={40} height={40} src="/img/logo.png" />
-        <div>
-          <h3 className="text-uppercase">React Sneakers</h3>
-          <p className="opacity-5">E-shop</p>
+      <Link to="/">
+        <div className="d-flex align-center">
+          <img width={40} height={40} src="/img/logo.png" />
+          <div>
+            <h3 className="text-uppercase">React Sneakers</h3>
+            <p className="opacity-5">E-shop</p>
+          </div>
         </div>
-      </div>
+      </Link>
       <ul className="d-flex">
         <li className="mr-30" onClick={() => setIsOpened(true)}>
           <img width={18} height={18} src="/img/cart.svg" />
           <span>{cartItems.length !== 0 ? cartItems.map((el) => el.price).reduce((a, b) => a + b, 0) : 0} EUR</span>
+        </li>
+        <li>
+          <Link to="favorites">
+            <img width={18} height={18} src="/img/heart.svg" />
+          </Link>
         </li>
         <li>
           <img width={18} height={18} src="/img/user.svg" />
