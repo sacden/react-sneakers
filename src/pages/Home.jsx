@@ -1,6 +1,6 @@
 import Card from "../components/Card";
 
-function Products({ onChangeSearchInput, items, search, addToCart }) {
+function Home({ onChangeSearchInput, items, searchValue, onAddToCart, onAddToFavorite }) {
   return (
     <div>
       <div className="d-flex align-center justify-between mb-40">
@@ -11,9 +11,13 @@ function Products({ onChangeSearchInput, items, search, addToCart }) {
         </div>
       </div>
       <div className="d-flex flex-wrap">
-        {items && items.filter((el) => el.title.toLowerCase().includes(search.toLowerCase())).map((product) => <Card product={product} addToCart={addToCart} key={product.id} />)}
+        {items
+          .filter((el) => el.title.toLowerCase().includes(searchValue.toLowerCase()))
+          .map((item, index) => (
+            <Card key={index} onFavorite={(obj) => onAddToFavorite(obj)} onPlus={(obj) => onAddToCart(obj)} {...item} />
+          ))}
       </div>
     </div>
   );
 }
-export default Products;
+export default Home;

@@ -3,18 +3,16 @@ import { Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
 import axios from "axios";
-import Products from "./pages/Products";
+import Home from "./pages/Home";
 import Favorites from "./pages/Favorites";
 
 function App() {
-  const [isOpened, setIsOpened] = useState(false);
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [search, setSearch] = useState("");
-
-  const onChangeSearchInput = (e) => {
-    setSearch(e.target.value);
-  };
+  const [favorites, setFavorites] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [cartOpened, setCartOpened] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
   // const [items, setItems] = useState([
   //   { title: "Sneakers for men Nike Blazer Mid Suede", price: 1399, imageUrl: "/img/products/1.jpg" },
@@ -36,26 +34,55 @@ function App() {
   useEffect(() => {
     axios.get("https://625d9d6f95cd5855d6237188.mockapi.io/items").then((res) => setItems(res.data));
     axios.get("https://625d9d6f95cd5855d6237188.mockapi.io/cart").then((res) => setCartItems(res.data));
+    axios.get("https://625d9d6f95cd5855d6237188.mockapi.io/favorites").then((res) => setFavorites(res.data));
   }, []);
 
-  const addToCart = (item) => {
-    axios.post("https://625d9d6f95cd5855d6237188.mockapi.io/cart", item);
-    setCartItems([...cartItems, item]);
+  const onAddToCart = (obj) => {
+    axios.post("https://625d9d6f95cd5855d6237188.mockapi.io/cart", obj);
+    setCartItems((prev) => [...prev, obj]);
   };
 
-  const onRemove = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
+  const onRemoveItem = (id) => {
     axios.delete(`https://625d9d6f95cd5855d6237188.mockapi.io/cart/${id}`);
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const onAddToFavorite = async (obj) => {
+    try {
+      if (favorites.find((favObj) => favObj.id === obj.id)) {
+        axios.delete(`https://625d9d6f95cd5855d6237188.mockapi.io/favorites/${obj.id}`);
+        setFavorites(favorites.filter((el) => el.id !== obj.id));
+        setIsLiked(!isLiked);
+      } else {
+        const { data } = await axios.post("https://625d9d6f95cd5855d6237188.mockapi.io/favorites", obj);
+
+        setFavorites((prev) => [...prev, data]);
+        setIsLiked(!isLiked);
+      }
+    } catch (error) {
+      alert("The product could not add to cart");
+    }
+  };
+
+  const onChangeSearchInput = (event) => {
+    setSearchValue(event.target.value);
   };
 
   return (
     <div className="wrapper clear">
-      {isOpened && <Drawer setIsOpened={setIsOpened} cartItems={cartItems} onRemove={onRemove} />}
-      <Header setIsOpened={setIsOpened} cartItems={cartItems} />
+      {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove={onRemoveItem} />}
+
+      <Header onClickCart={() => setCartOpened(true)} cartItems={cartItems} />
       <div className="content p-40">
         <Routes>
-          <Route path="/" index element={<Products onChangeSearchInput={onChangeSearchInput} items={items} search={search} addToCart={addToCart} />}></Route>
-          <Route path="favorites" index element={<Favorites />}></Route>
+          <Route
+            path="/"
+            index
+            element={
+              <Home items={items} searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearchInput={onChangeSearchInput} onAddToFavorite={onAddToFavorite} onAddToCart={onAddToCart} />
+            }
+          ></Route>
+          <Route path="favorites" index element={<Favorites items={favorites} onAddToFavorite={onAddToFavorite} />}></Route>
         </Routes>
       </div>
     </div>

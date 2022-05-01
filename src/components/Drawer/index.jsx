@@ -1,16 +1,16 @@
 import styles from "./Drawer.module.scss";
 
-function Drawer({ setIsOpened, cartItems, onRemove }) {
+function Drawer({ onClose, onRemove, items = [] }) {
   return (
     <div className="overlay">
       <div className={styles.drawer}>
         <h2 className="d-flex justify-between mb-30">
-          Cart <img className="cu-p" src="/img/btn-remove.svg" alt="Remove" onClick={() => setIsOpened(false)} />
+          Cart <img className="cu-p" src="/img/btn-remove.svg" alt="Remove" onClick={onClose} />
         </h2>
-        {cartItems.length > 0 ? (
+        {items.length > 0 ? (
           <div>
             <div className={styles.items}>
-              {cartItems.map((product) => {
+              {items.map((product) => {
                 return (
                   <div className="cartItem d-flex align-center mb-20" key={product.id}>
                     <div style={{ backgroundImage: `url(${product.imageUrl})` }} className="cartItemImg"></div>
@@ -30,12 +30,12 @@ function Drawer({ setIsOpened, cartItems, onRemove }) {
                 <li>
                   <span>Total:</span>
                   <div></div>
-                  <b>{cartItems.length !== 0 ? cartItems.map((el) => el.price).reduce((a, b) => a + b, 0) : 0} EUR</b>
+                  <b>{items.length !== 0 ? items.map((el) => el.price).reduce((a, b) => a + b, 0) : 0} EUR</b>
                 </li>
                 <li>
                   <span>VAT 5%:</span>
                   <div></div>
-                  <b>{cartItems.length !== 0 ? (cartItems.map((el) => el.price).reduce((a, b) => a + b, 0) * 0.05).toFixed(2) : 0} EUR </b>
+                  <b>{items.length !== 0 ? (items.map((el) => el.price).reduce((a, b) => a + b, 0) * 0.05).toFixed(2) : 0} EUR </b>
                 </li>
               </ul>
               <button className="greenButton">
@@ -49,7 +49,7 @@ function Drawer({ setIsOpened, cartItems, onRemove }) {
             <h3>Your cart is empty</h3>
 
             <p className="opacity-6">Please add at least one product to order something.</p>
-            <button className="greenButton" onClick={() => setIsOpened(false)}>
+            <button className="greenButton" onClick={onClose}>
               Go back{" "}
             </button>
           </div>
