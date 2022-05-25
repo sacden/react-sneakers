@@ -11,11 +11,10 @@ function Home({ onChangeSearchInput, items, searchValue, onAddToCart, onAddToFav
         </div>
       </div>
       <div className="d-flex flex-wrap">
-        {items
-          .filter((el) => el.title.toLowerCase().includes(searchValue.toLowerCase()))
-          .map((item, index) => (
-            <Card key={index} onFavorite={(obj) => onAddToFavorite(obj)} onPlus={(obj) => onAddToCart(obj)} {...item} />
-          ))}
+        {items.length > 0 &&
+          items
+            .filter((el) => el.title.toLowerCase().includes(searchValue.toLowerCase()))
+            .map((item, index) => <Card key={index} onFavorite={(obj) => onAddToFavorite(obj)} onPlus={(obj) => onAddToCart(obj)} {...item} />)}
       </div>
     </div>
   );

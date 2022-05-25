@@ -10,19 +10,21 @@ function Drawer({ onClose, onRemove, items = [] }) {
         {items.length > 0 ? (
           <div>
             <div className={styles.items}>
-              {items.map((product) => {
-                return (
-                  <div className="cartItem d-flex align-center mb-20" key={product.id}>
-                    <div style={{ backgroundImage: `url(${product.imageUrl})` }} className="cartItemImg"></div>
+              {items
+                .filter((el) => el.isFavorited === true)
+                .map((product) => {
+                  return (
+                    <div className="cartItem d-flex align-center mb-20" key={product.id}>
+                      <div style={{ backgroundImage: `url(${product.imageUrl})` }} className="cartItemImg"></div>
 
-                    <div className="mr-20 flex">
-                      <p className="mb-5">{product.title}</p>
-                      <b>{product.price} EUR</b>
+                      <div className="mr-20 flex">
+                        <p className="mb-5">{product.title}</p>
+                        <b>{product.price} EUR</b>
+                      </div>
+                      <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove" onClick={() => onRemove(product)} />
                     </div>
-                    <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove" onClick={() => onRemove(product.id)} />
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
 
             <div className="cartTotalBlock">
@@ -30,12 +32,30 @@ function Drawer({ onClose, onRemove, items = [] }) {
                 <li>
                   <span>Total:</span>
                   <div></div>
-                  <b>{items.length !== 0 ? items.map((el) => el.price).reduce((a, b) => a + b, 0) : 0} EUR</b>
+                  <b>
+                    {items.length !== 0
+                      ? items
+                          .filter((el) => el.isFavorited === true)
+                          .map((el) => el.price)
+                          .reduce((a, b) => a + b, 0)
+                      : 0}{" "}
+                    EUR
+                  </b>
                 </li>
                 <li>
                   <span>VAT 5%:</span>
                   <div></div>
-                  <b>{items.length !== 0 ? (items.map((el) => el.price).reduce((a, b) => a + b, 0) * 0.05).toFixed(2) : 0} EUR </b>
+                  <b>
+                    {items.length !== 0
+                      ? (
+                          items
+                            .filter((el) => el.isFavorited === true)
+                            .map((el) => el.price)
+                            .reduce((a, b) => a + b, 0) * 0.05
+                        ).toFixed(2)
+                      : 0}{" "}
+                    EUR{" "}
+                  </b>
                 </li>
               </ul>
               <button className="greenButton">

@@ -8,11 +8,8 @@ import Favorites from "./pages/Favorites";
 
 function App() {
   const [items, setItems] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
-  const [favorites, setFavorites] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [cartOpened, setCartOpened] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
 
   // const [items, setItems] = useState([
   //   { title: "Sneakers for men Nike Blazer Mid Suede", price: 1399, imageUrl: "/img/products/1.jpg" },
@@ -33,31 +30,45 @@ function App() {
 
   useEffect(() => {
     axios.get("https://625d9d6f95cd5855d6237188.mockapi.io/items").then((res) => setItems(res.data));
-    axios.get("https://625d9d6f95cd5855d6237188.mockapi.io/cart").then((res) => setCartItems(res.data));
-    axios.get("https://625d9d6f95cd5855d6237188.mockapi.io/favorites").then((res) => setFavorites(res.data));
   }, []);
 
-  const onAddToCart = (obj) => {
-    axios.post("https://625d9d6f95cd5855d6237188.mockapi.io/cart", obj);
-    setCartItems((prev) => [...prev, obj]);
+  const onAddToCart = async (obj) => {
+    try {
+      if (items.find((item) => Number(item.id) === Number(obj.id) && obj.isFavorited === false)) {
+        // setItems((prev) => prev.map((item) => (Number(item.id) === Number(obj.id) ? { ...item, isFavorited: true } : item)));
+        axios
+          .put(`https://625d9d6f95cd5855d6237188.mockapi.io/items/${Number(obj.id)}`, { ...obj, isFavorited: true })
+          .then((res) => setItems((prev) => prev.map((item) => (Number(item.id) === Number(obj.id) ? res.data : item))));
+      }
+      if (items.find((item) => Number(item.id) === Number(obj.id) && obj.isFavorited === true)) {
+        // setItems((prev) => prev.map((item) => (Number(item.id) === Number(obj.id) ? { ...item, isFavorited: false } : item)));
+        axios
+          .put(`https://625d9d6f95cd5855d6237188.mockapi.io/items/${Number(obj.id)}`, { ...obj, isFavorited: false })
+          .then((res) => setItems((prev) => prev.map((item) => (Number(item.id) === Number(obj.id) ? res.data : item))));
+      }
+    } catch (error) {
+      alert(error);
+    }
   };
 
-  const onRemoveItem = (id) => {
-    axios.delete(`https://625d9d6f95cd5855d6237188.mockapi.io/cart/${id}`);
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  const onRemoveItem = (obj) => {
+    axios.put(`https://625d9d6f95cd5855d6237188.mockapi.io/items/${obj.id}`, { ...obj, isFavorited: false });
+    setItems((prev) => prev.filter((item) => item.id !== obj.id));
   };
 
   const onAddToFavorite = async (obj) => {
     try {
-      if (favorites.find((favObj) => favObj.id === obj.id)) {
-        axios.delete(`https://625d9d6f95cd5855d6237188.mockapi.io/favorites/${obj.id}`);
-        setFavorites(favorites.filter((el) => el.id !== obj.id));
-        setIsLiked(!isLiked);
-      } else {
-        const { data } = await axios.post("https://625d9d6f95cd5855d6237188.mockapi.io/favorites", obj);
-
-        setFavorites((prev) => [...prev, data]);
-        setIsLiked(!isLiked);
+      if (items.find((itemsObj) => itemsObj.uid === obj.uid && obj.isLiked === false)) {
+        //setItems((prev) => prev.map((item) => (Number(item.id) === Number(obj.id) ? { ...item, isLiked: true } : item)));
+        axios
+          .put(`https://625d9d6f95cd5855d6237188.mockapi.io/items/${obj.id}`, { ...obj, isLiked: true })
+          .then((res) => setItems((prev) => prev.map((item) => (Number(item.id) === Number(obj.id) ? res.data : item))));
+      }
+      if (items.find((itemsObj) => itemsObj.uid === obj.uid && obj.isLiked === true)) {
+        //setItems((prev) => prev.map((item) => (Number(item.id) === Number(obj.id) ? { ...item, isLiked: false } : item)));
+        axios
+          .put(`https://625d9d6f95cd5855d6237188.mockapi.io/items/${obj.id}`, { ...obj, isLiked: false })
+          .then((res) => setItems((prev) => prev.map((item) => (Number(item.id) === Number(obj.id) ? res.data : item))));
       }
     } catch (error) {
       alert("The product could not add to cart");
@@ -70,9 +81,9 @@ function App() {
 
   return (
     <div className="wrapper clear">
-      {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove={onRemoveItem} />}
+      {cartOpened && <Drawer items={items} onClose={() => setCartOpened(false)} onRemove={onRemoveItem} />}
 
-      <Header onClickCart={() => setCartOpened(true)} cartItems={cartItems} />
+      <Header onClickCart={() => setCartOpened(true)} cartItems={items} />
       <div className="content p-40">
         <Routes>
           <Route
@@ -82,7 +93,7 @@ function App() {
               <Home items={items} searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearchInput={onChangeSearchInput} onAddToFavorite={onAddToFavorite} onAddToCart={onAddToCart} />
             }
           ></Route>
-          <Route path="favorites" index element={<Favorites items={favorites} onAddToFavorite={onAddToFavorite} />}></Route>
+          <Route path="favorites" index element={<Favorites items={items} onAddToFavorite={onAddToFavorite} />}></Route>
         </Routes>
       </div>
     </div>
