@@ -5,7 +5,7 @@ function Drawer({ onClose, onRemove, items = [] }) {
     <div className="overlay">
       <div className={styles.drawer}>
         <h2 className="d-flex justify-between mb-30">
-          Cart <img className="cu-p" src="/img/btn-remove.svg" alt="Remove" onClick={onClose} />
+          Cart <img className="cu-p" src="img/btn-remove.svg" alt="Remove" onClick={onClose} />
         </h2>
         {items.length > 0 ? (
           <div>
@@ -21,7 +21,7 @@ function Drawer({ onClose, onRemove, items = [] }) {
                         <p className="mb-5">{product.title}</p>
                         <b>{product.price} EUR</b>
                       </div>
-                      <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove" onClick={() => onRemove(product)} />
+                      <img className="removeBtn" src="img/btn-remove.svg" alt="Remove" onClick={() => onRemove(product)} />
                     </div>
                   );
                 })}
@@ -59,13 +59,13 @@ function Drawer({ onClose, onRemove, items = [] }) {
                 </li>
               </ul>
               <button className="greenButton">
-                Buy <img src="/img/arrow.svg" alt="Arrow" />
+                Buy <img src="img/arrow.svg" alt="Arrow" />
               </button>
             </div>
           </div>
         ) : (
           <div className="d-flex align-center justify-center flex-column flex">
-            <img src="/img/emptyCart.svg" alt="Empty cart" />
+            <img src="img/emptyCart.svg" alt="Empty cart" />
             <h3>Your cart is empty</h3>
 
             <p className="opacity-6">Please add at least one product to order something.</p>
