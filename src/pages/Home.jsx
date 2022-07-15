@@ -6,7 +6,7 @@ function Home({ onChangeSearchInput, items, searchValue, onAddToCart, onAddToFav
       <div className="d-flex align-center justify-between mb-40">
         <h1>All products</h1>
         <div className="search-block d-flex">
-          <img src="img/search.svg" alt="Search" />
+          <img src="./react-sneakers/img/search.svg" alt="Search" />
           <input placeholder="Search..." onChange={onChangeSearchInput} />
         </div>
       </div>

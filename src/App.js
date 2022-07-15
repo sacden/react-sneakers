@@ -12,14 +12,14 @@ function App() {
   const [cartOpened, setCartOpened] = useState(false);
 
   // const [items, setItems] = useState([
-  //   { title: "Sneakers for men Nike Blazer Mid Suede", price: 1399, imageUrl: "img/products/1.jpg" },
-  //   { title: "Sneakers for men Nike Air Max 270", price: 1560, imageUrl: "img/products/2.jpg" },
-  //   { title: "Sneakers for men Blazer Mid Suede", price: 849, imageUrl: "img/products/3.jpg" },
-  //   { title: "Sneakers for men Puma X Aka Boku Future Rider", price: 899, imageUrl: "img/products/4.jpg" },
-  //   { title: "Sneakers for men Under Armour Curry 8", price: 1209, imageUrl: "img/products/5.jpg" },
-  //   { title: "Sneakers for men Nike Kyrie 7", price: 699, imageUrl: "img/products/6.jpg" },
-  //   { title: "Sneakers for men Jordan air Jordan 11", price: 1499, imageUrl: "img/products/7.jpg" },
-  //   { title: "Sneakers for men Nike Lebron XVIII", price: 899, imageUrl: "img/products/8.jpg" },
+  //   { title: "Sneakers for men Nike Blazer Mid Suede", price: 1399, imageUrl: "./react-sneakers/img/products/1.jpg" },
+  //   { title: "Sneakers for men Nike Air Max 270", price: 1560, imageUrl: "./react-sneakers/img/products/2.jpg" },
+  //   { title: "Sneakers for men Blazer Mid Suede", price: 849, imageUrl: "./react-sneakers/img/products/3.jpg" },
+  //   { title: "Sneakers for men Puma X Aka Boku Future Rider", price: 899, imageUrl: "./react-sneakers/img/products/4.jpg" },
+  //   { title: "Sneakers for men Under Armour Curry 8", price: 1209, imageUrl: "./react-sneakers/img/products/5.jpg" },
+  //   { title: "Sneakers for men Nike Kyrie 7", price: 699, imageUrl: "./react-sneakers/img/products/6.jpg" },
+  //   { title: "Sneakers for men Jordan air Jordan 11", price: 1499, imageUrl: "./react-sneakers/img/products/7.jpg" },
+  //   { title: "Sneakers for men Nike Lebron XVIII", price: 899, imageUrl: "./react-sneakers/img/products/8.jpg" },
   // ]);
 
   // useEffect(() => {
